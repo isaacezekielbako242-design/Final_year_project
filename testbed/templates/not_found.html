@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Not found{% endblock %}
+{% block content %}
+<div class="card narrow"><h1>{{ what }} not found</h1><p>The requested {{ what|lower }} does not exist.</p>
+<a class="btn" href="{{ url_for('index') }}">Return home</a></div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+{% block content %}
+<h1>Search results</h1>
+<p class="muted">Showing results for: <strong>{{ query }}</strong> ({{ results|length }} found)</p>
+<div class="grid">
+  {% for p in results %}{% include "_product_card.html" %}{% else %}<p>No products matched your search.</p>{% endfor %}
+</div>
+{% endblock %}

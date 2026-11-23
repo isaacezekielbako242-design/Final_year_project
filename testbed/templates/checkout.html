@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<h1>Checkout</h1>
+<div class="card">
+  <h2>Order summary</h2>
+  {% if items %}
+    <ul>{% for i in items %}<li>{{ i.quantity }} × {{ i.name }} — ${{ '%.2f'|format(i.price * i.quantity) }}</li>{% endfor %}</ul>
+    <p class="price big">Total: ${{ '%.2f'|format(total) }}</p>
+  {% else %}
+    <p class="muted">Your cart is currently empty.</p>
+  {% endif %}
+  <p>Ship to: <strong>{{ user.address }}</strong></p>
+  <form method="post" action="{{ url_for('checkout') }}">
+    {{ csrf_field('checkout') }}
+    <label>Payment method
+      <select name="payment_method">
+        <option value="cod">Cash on delivery</option>
+        <option value="card">Card (simulated)</option>
+      </select>
+    </label>
+    <button type="submit" class="btn">Place order</button>
+  </form>
+  <p><a href="{{ url_for('cart', msg='Checkout cancelled.') }}">Cancel and return to cart</a></p>
+</div>
+{% endblock %}

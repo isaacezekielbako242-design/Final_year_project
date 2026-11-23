@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Cart{% endblock %}
+{% block content %}
+<h1>Your shopping cart</h1>
+{% if msg %}<div class="alert alert-info" id="cart-status">{{ msg }}</div>{% endif %}
+{% if items %}
+<table class="table">
+  <thead><tr><th>Product</th><th>Price</th><th>Quantity</th><th>Subtotal</th></tr></thead>
+  <tbody>
+  {% for i in items %}
+    <tr>
+      <td>{{ i.name }}</td>
+      <td>${{ '%.2f'|format(i.price) }}</td>
+      <td>
+        <form method="post" action="{{ url_for('cart_update') }}" class="inline-form">
+          {{ csrf_field('cart_update') }}
+          <input type="hidden" name="cart_item_id" value="{{ i.cart_item_id }}">
+          <input type="number" name="quantity" value="{{ i.quantity }}" min="0" max="20" aria-label="Quantity">
+          <button type="submit" class="btn btn-small">Update</button>
+        </form>
+      </td>
+      <td>${{ '%.2f'|format(i.price * i.quantity) }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p class="price big">Total: ${{ '%.2f'|format(total) }}</p>
+<a class="btn" href="{{ url_for('checkout') }}">Proceed to checkout</a>
+{% else %}
+<p>Your cart is empty. <a href="{{ url_for('products') }}">Continue shopping</a>.</p>
+<p><a href="{{ url_for('checkout') }}">Go to checkout</a></p>
+{% endif %}
+{% endblock %}

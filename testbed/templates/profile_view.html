@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Customer profile{% endblock %}
+{% block content %}
+<h1>Customer profile</h1>
+<div class="card">
+  <dl class="details">
+    <dt>Customer ID</dt><dd>{{ user.user_id }}</dd>
+    <dt>Username</dt><dd>{{ user.username }}</dd>
+    <dt>Email</dt><dd>{{ user.email }}</dd>
+    <dt>Address</dt><dd>{{ user.address }}</dd>
+  </dl>
+  {% if user.user_id == current_user.id %}<a class="btn" href="{{ url_for('profile') }}">Edit profile</a>{% endif %}
+</div>
+{% endblock %}

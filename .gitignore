@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+testbed/instance/*.db
+reports/*.html
+reports/*.json
+evaluation/evaluation_results/*.json
+evaluation/evaluation_results/*.html
+evaluation/evaluation_results/*.md

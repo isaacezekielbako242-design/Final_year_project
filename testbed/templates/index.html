@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Welcome to ShopLab</h1>
+  <p>A small fictitious e-commerce store used as a controlled testbed for the vulnerability scanner.</p>
+  <a class="btn" href="{{ url_for('products') }}">Browse all products</a>
+</section>
+<h2>Featured products</h2>
+<div class="grid">
+  {% for p in products %}{% include "_product_card.html" %}{% endfor %}
+</div>
+{% endblock %}

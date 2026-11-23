@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Edit profile{% endblock %}
+{% block content %}
+<h1>Edit profile</h1>
+{% if msg %}<div class="alert alert-info">{{ msg }}</div>{% endif %}
+<div class="card">
+  <form method="post" action="{{ url_for('profile_update') }}" class="stack">
+    {{ csrf_field('profile_update') }}
+    <label>Email <input type="email" name="email" value="{{ user.email }}" required></label>
+    <label>Delivery address <textarea name="address" rows="3">{{ user.address }}</textarea></label>
+    <button type="submit" class="btn">Save changes</button>
+  </form>
+  <p><a href="{{ url_for('profile_view', user_id=user.user_id) }}">← Back to profile</a></p>
+</div>
+{% endblock %}

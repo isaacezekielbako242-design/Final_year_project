@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Error{% endblock %}
+{% block content %}
+<div class="card narrow">
+  {% if code == 404 %}<h1>Page not found</h1><p>The page you requested could not be found.</p>
+  {% elif code == 403 %}<h1>Access denied</h1><p>You do not have permission to view this resource.</p>
+  {% elif code == 400 %}<h1>Bad request</h1><p>Your request could not be processed. Please reload the page and try again.</p>
+  {% else %}<h1>Something went wrong</h1><p>An unexpected error occurred. Please try again later.</p>{% endif %}
+  <a class="btn" href="{{ url_for('index') }}">Return home</a>
+</div>
+{% endblock %}

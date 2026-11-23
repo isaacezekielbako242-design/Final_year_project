@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <h1>Create an account</h1>
+  <form method="post" action="{{ url_for('register') }}" class="stack">
+    {{ csrf_field('register') }}
+    <label>Username <input type="text" name="username" required minlength="3"></label>
+    <label>Email <input type="email" name="email" required></label>
+    <label>Password <input type="password" name="password" required minlength="8"></label>
+    <label>Delivery address <textarea name="address" rows="2"></textarea></label>
+    <button type="submit" class="btn">Register</button>
+  </form>
+  <p class="muted">Use fictitious details only.</p>
+</div>
+{% endblock %}

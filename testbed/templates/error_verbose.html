@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Internal Server Error{% endblock %}
+{% block content %}
+{# VULN-11: technical details are disclosed to the user. (Escaped, so it is not an XSS vector.) #}
+<div class="card error-card">
+  <h1>Internal Server Error</h1>
+  <p><strong>{{ details.exception }}</strong></p>
+  <p>Request: <code>{{ details.path }}</code></p>
+  <p>Python {{ details.python }} on {{ details.platform }}</p>
+  <pre class="trace">{{ details.traceback }}</pre>
+</div>
+{% endblock %}

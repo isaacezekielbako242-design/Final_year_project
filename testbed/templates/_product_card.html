@@ -1,0 +1,9 @@
+<article class="card product-card">
+  <span class="tag">{{ p.category }}</span>
+  <h3><a href="{{ url_for('product_detail', id=p.product_id) }}">{{ p.name }}</a></h3>
+  <p class="muted">{{ p.description }}</p>
+  <div class="card-footer">
+    <span class="price">${{ '%.2f'|format(p.price) }}</span>
+    <a class="btn btn-small" href="{{ url_for('product_detail', id=p.product_id) }}">View</a>
+  </div>
+</article>

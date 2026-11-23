@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Products{% endblock %}
+{% block content %}
+<h1>Products</h1>
+<div class="filters">
+  <a class="chip {% if not selected %}active{% endif %}" href="{{ url_for('products') }}">All</a>
+  {% for c in categories %}
+    <a class="chip {% if selected == c %}active{% endif %}" href="{{ url_for('products', category=c) }}">{{ c }}</a>
+  {% endfor %}
+</div>
+<div class="grid">
+  {% for p in products %}{% include "_product_card.html" %}{% else %}<p>No products found.</p>{% endfor %}
+</div>
+{% endblock %}

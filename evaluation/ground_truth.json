@@ -1,0 +1,117 @@
+{
+  "testbed": "ShopLab (custom Flask e-commerce testbed) - vulnerable version",
+  "description": "Register of the vulnerabilities deliberately introduced into testbed/vulnerable_routes.py and testbed/app.py. The patched version corrects every entry, so its expected register is empty.",
+  "matching_rules": "A finding matches an entry when the category is equal AND either (a) the URL path and parameter are equal (parameter null = any), or (b) for site-wide misconfigurations, the finding's check id equals the entry's 'check'.",
+  "vulnerabilities": [
+    {
+      "id": "VULN-01",
+      "category": "SQL Injection",
+      "url": "/search",
+      "parameter": "q",
+      "function": "Product search",
+      "description": "The search term is concatenated into a LIKE clause of an SQL statement.",
+      "expected_evidence": "SQLite syntax error (sqlite3.OperationalError) for a quote/parenthesis, and different result sets for TRUE/FALSE conditions.",
+      "match": {"path": "/search", "parameter": "q"}
+    },
+    {
+      "id": "VULN-02",
+      "category": "SQL Injection",
+      "url": "/product",
+      "parameter": "id",
+      "function": "Product details",
+      "description": "The numeric product id is concatenated into the WHERE clause without validation.",
+      "expected_evidence": "'unrecognized token' error for a quote; product page for 'id AND 1=1' and not-found page for 'id AND 1=2'.",
+      "match": {"path": "/product", "parameter": "id"}
+    },
+    {
+      "id": "VULN-03",
+      "category": "Cross-Site Scripting (XSS)",
+      "url": "/search",
+      "parameter": "q",
+      "function": "Search results page",
+      "description": "The search term is rendered with Markup() (marked safe), bypassing Jinja2 auto-escaping.",
+      "expected_evidence": "Injected marker tag reflected unencoded in the 'Showing results for' line.",
+      "match": {"path": "/search", "parameter": "q"}
+    },
+    {
+      "id": "VULN-04",
+      "category": "Cross-Site Scripting (XSS)",
+      "url": "/cart",
+      "parameter": "msg",
+      "function": "Cart status message",
+      "description": "The cart status message taken from the URL is rendered without encoding.",
+      "expected_evidence": "Injected marker tag reflected unencoded inside the #cart-status alert.",
+      "match": {"path": "/cart", "parameter": "msg"}
+    },
+    {
+      "id": "VULN-05",
+      "category": "Cross-Site Request Forgery (CSRF)",
+      "url": "/profile/update",
+      "parameter": null,
+      "function": "Profile update (POST)",
+      "description": "The profile-update form has no anti-CSRF token and the endpoint is exempt from token validation.",
+      "expected_evidence": "POST without a token is accepted (redirect to /profile?msg=Profile updated).",
+      "match": {"path": "/profile/update", "parameter": null}
+    },
+    {
+      "id": "VULN-06",
+      "category": "Cross-Site Request Forgery (CSRF)",
+      "url": "/checkout",
+      "parameter": null,
+      "function": "Order placement (POST)",
+      "description": "The checkout / place-order form has no anti-CSRF token and the endpoint is exempt from token validation.",
+      "expected_evidence": "POST without a token is processed by the order logic instead of being rejected.",
+      "match": {"path": "/checkout", "parameter": null}
+    },
+    {
+      "id": "VULN-07",
+      "category": "Broken Access Control",
+      "url": "/order",
+      "parameter": "id",
+      "function": "Order details",
+      "description": "Order details are returned for any order id without checking that the order belongs to the logged-in user.",
+      "expected_evidence": "User B receives HTTP 200 with user A's order details (customer name, address, items).",
+      "match": {"path": "/order", "parameter": "id"}
+    },
+    {
+      "id": "VULN-08",
+      "category": "Broken Access Control",
+      "url": "/profile/view",
+      "parameter": "user_id",
+      "function": "Customer profile viewing",
+      "description": "Any logged-in user can view any customer's profile (email, address) by changing user_id.",
+      "expected_evidence": "User B receives HTTP 200 with user A's profile.",
+      "match": {"path": "/profile/view", "parameter": "user_id"}
+    },
+    {
+      "id": "VULN-09",
+      "category": "Security Misconfiguration",
+      "url": "(site-wide)",
+      "parameter": "Content-Security-Policy, X-Content-Type-Options, X-Frame-Options",
+      "function": "HTTP response headers",
+      "description": "No security headers are sent on any response.",
+      "expected_evidence": "Headers absent from all HTML responses.",
+      "match": {"check": "missing_security_headers"}
+    },
+    {
+      "id": "VULN-10",
+      "category": "Security Misconfiguration",
+      "url": "(site-wide)",
+      "parameter": "session cookie",
+      "function": "Session management",
+      "description": "SESSION_COOKIE_HTTPONLY=False and no SameSite attribute on the Flask session cookie.",
+      "expected_evidence": "Set-Cookie: session=...; Path=/  (no HttpOnly, no SameSite).",
+      "match": {"check": "insecure_session_cookie"}
+    },
+    {
+      "id": "VULN-11",
+      "category": "Security Misconfiguration",
+      "url": "(site-wide, e.g. /product, /order)",
+      "parameter": null,
+      "function": "Error handling",
+      "description": "Unhandled exceptions are shown to the user with exception type, Python version, platform and a full stack trace.",
+      "expected_evidence": "'Traceback (most recent call last)' and 'sqlite3.OperationalError' in HTTP 500 responses.",
+      "match": {"check": "verbose_errors"}
+    }
+  ]
+}
